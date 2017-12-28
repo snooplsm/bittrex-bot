@@ -1,0 +1,40 @@
+plugins {
+    id 'idea' apply true
+    id 'java' apply true
+    id "org.jetbrains.kotlin.jvm" version "1.2.10"
+    id "org.jetbrains.kotlin.kapt" version "1.2.10"
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.10"
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.google.dagger:dagger:2.14.1'
+    kapt 'com.google.dagger:dagger-compiler:2.14.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+kapt {
+    generateStubs true
+}
+sourceSets.main.java.srcDir file("$buildDir/generated/source/kapt/")
+
+idea {
+    module {
+        generatedSourceDirs += file("$buildDir/generated/source/kapt/")
+    }
+}
