@@ -1,6 +1,5 @@
 package us.wmwm.bittrex.market
 
-import rx.Emitter
 import rx.Observable
 import rx.Subscription
 import rx.schedulers.Schedulers
@@ -52,23 +51,9 @@ class MarketManager @Inject constructor(val api: Api) {
                 }
                 .map { res ->
                     val markets =
-                            res?.result?.filter { it.isActive }
-                                    ?.sortedWith(
-                                            object : Comparator<Market> {
-                                                override fun compare(o1: Market?, o2: Market?): Int {
-                                                    val o1o = o1!!.baseCurrency
-                                                    val o2o = o2!!.baseCurrency
-                                                    var c: Int = o1o!!.ordinal - o2o!!.ordinal
-                                                    if (c != 0) {
-                                                        return c
-                                                    }
-                                                    val o2a = o2.marketName.substringAfter('-')
-                                                    val o1a = o1.marketName.substringAfter('-')
-                                                    c = o1a.compareTo(o2a)
-                                                    return c
-                                                }
-                                            }
-                                    )
+                            res?.result
+                                    ?.filter { it.isActive }
+                                    ?.sortedWith(MarketComparator())
                     markets
                 }
                 .subscribe({ res ->
@@ -77,4 +62,20 @@ class MarketManager @Inject constructor(val api: Api) {
 
                 })
     }
+}
+
+class MarketComparator : Comparator<Market> {
+    override fun compare(o1: Market?, o2: Market?): Int {
+        val o1o = o1!!.baseCurrency
+        val o2o = o2!!.baseCurrency
+        var c: Int = o1o!!.ordinal - o2o!!.ordinal
+        if (c != 0) {
+            return c
+        }
+        val o2a = o2.marketName.substringAfter('-')
+        val o1a = o1.marketName.substringAfter('-')
+        c = o1a.compareTo(o2a)
+        return c
+    }
+
 }
