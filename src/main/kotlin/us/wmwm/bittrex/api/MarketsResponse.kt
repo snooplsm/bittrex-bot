@@ -1,10 +1,11 @@
-package us.wmwm.bittrex.models
+package us.wmwm.bittrex.api
 
 import com.google.gson.annotations.SerializedName
+import us.wmwm.bittrex.models.Market
 
 class MarketsResponse : Response() {
 
     @SerializedName("result")
-    lateinit var result:List<Market>
+    var result:List<Market> = emptyList()
 }
 

@@ -1,4 +1,4 @@
-package us.wmwm.bittrex.models
+package us.wmwm.bittrex.api
 
 import com.google.gson.annotations.SerializedName
 

@@ -12,6 +12,9 @@ import us.wmwm.bittrex.api.Api
 import java.util.concurrent.TimeUnit
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import us.wmwm.bittrex.api.UtcDateTypeAdapter
+import java.util.*
 
 @Module
 class BittrexModule {
@@ -40,6 +43,8 @@ class BittrexModule {
 
     @Provides
     fun gson(): Gson {
-        return GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create()
+        return GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                .registerTypeAdapter(object : TypeToken<Date>(){}.type, UtcDateTypeAdapter())
+                .create()
     }
 }

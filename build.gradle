@@ -28,9 +28,6 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-kapt {
-    generateStubs true
-}
 sourceSets.main.java.srcDir file("$buildDir/generated/source/kapt/")
 
 idea {
