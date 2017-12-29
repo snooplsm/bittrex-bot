@@ -12,5 +12,8 @@ interface Api {
     @GET("v1.1/public/getcurrencies")
     fun currencies(): Single<Result<CurrenciesResponse>>
 
+    @GET("v1.1/public/getmarketsummaries")
+    fun marketSummaries(): Single<Result<MarketSummariesResponse>>
+
 }
 

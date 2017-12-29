@@ -19,7 +19,7 @@ class CurrencyManager @Inject constructor(val api: Api) {
 
     fun currencies(): Observable<Currencies> {
         if (currencySub?.isUnsubscribed != false) {
-            currencySub = Observable.interval(0, 60000, TimeUnit.MILLISECONDS)
+            currencySub = Observable.interval(0, 120000, TimeUnit.MILLISECONDS)
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
