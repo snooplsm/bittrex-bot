@@ -18,9 +18,18 @@ class MarketSummary {
     var openSellOrders:Int = 0
     var prevDay:Double = 0.0
     lateinit var created: Date
-    lateinit var displayMarketName:String
 
     fun changeRate24HrComparison() = high - ask
+
+    fun changeRate24HrPercent() = 100 * (high - ask) / high
+
+    override fun toString(): String {
+        return "MarketSummary(updated=$updated, marketName='$marketName', high=${format(high)}, last=${format(last)}, change%=${changeRate24HrPercent()}, low=${format(low)}, diff=${format(changeRate24HrComparison())}, volume=$volume)"
+    }
+
+    fun format(doub:Double): String {
+        return String.format("%.10f", doub)
+    }
 
 
 }

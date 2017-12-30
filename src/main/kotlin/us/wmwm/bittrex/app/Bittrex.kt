@@ -5,6 +5,7 @@ import us.wmwm.bittrex.BittrexModule
 import us.wmwm.bittrex.api.Api
 import us.wmwm.bittrex.currency.CurrencyManager
 import us.wmwm.bittrex.market.MarketManager
+import us.wmwm.bittrex.marketsummary.MarketSummaryManager
 import javax.inject.Singleton
 
 @Singleton
@@ -12,5 +13,6 @@ import javax.inject.Singleton
 interface Bittrex {
     fun api(): Api
     fun marketManager(): MarketManager
+    fun marketSummaryManager(): MarketSummaryManager
     fun currencyManager(): CurrencyManager
 }

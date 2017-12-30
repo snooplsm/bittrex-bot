@@ -17,14 +17,14 @@ class MarketSummaryManager @Inject constructor(val api: Api) {
     private var marketSummaryApiSub: Subscription? = null
     private var marketSummaryPublisher: BehaviorSubject<MarketSummaries> = BehaviorSubject.create()
 
-    fun markets(): Observable<MarketSummaries> {
+    fun marketSummaries(): Observable<MarketSummaries> {
         if (marketSummarySub?.isUnsubscribed != false) {
-            marketSummarySub = Observable.interval(0, 120000, TimeUnit.MILLISECONDS)
+            marketSummarySub = Observable.interval(0, 59000, TimeUnit.MILLISECONDS)
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .subscribe({ _ ->
-                        fetchMarket()
+                        fetchMarketSummaries()
                     })
         }
         return marketSummaryPublisher.asObservable().doOnUnsubscribe {
@@ -35,7 +35,7 @@ class MarketSummaryManager @Inject constructor(val api: Api) {
         }
     }
 
-    private fun fetchMarket() {
+    private fun fetchMarketSummaries() {
         marketSummaryApiSub?.unsubscribe()
         marketSummaryApiSub = api.marketSummaries()
                 .subscribeOn(Schedulers.io())
