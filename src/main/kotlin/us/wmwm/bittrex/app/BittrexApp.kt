@@ -4,6 +4,7 @@ import rx.Subscription
 import us.wmwm.bittrex.models.Currencies
 import us.wmwm.bittrex.models.MarketSummaries
 import us.wmwm.bittrex.models.Markets
+import java.util.*
 
 class BittrexApp() {
 
@@ -20,14 +21,24 @@ class BittrexApp() {
     fun start() {
         //startMarketUpdater()
         //startCurrencyUpdater()
-        startMarketSummaryUpdater()
+        //startMarketSummaryUpdater()
+        startBalance()
+    }
+
+    private fun startBalance() {
+        app.balanceManager()
+                .privateApi
+                .balances()
+                .subscribe({res->
+                    println(res)
+                }, {e-> e.printStackTrace()})
     }
 
     private fun startMarketSummaryUpdater() {
         marketSummarySub?.unsubscribe()
         marketSummarySub = app.marketSummaryManager()
                 .marketSummaries()
-                .subscribe({res->
+                .subscribe({ res ->
                     marketSummaries = res;
                     res.marketSummaries
                             .filter { it ->
@@ -36,30 +47,31 @@ class BittrexApp() {
                             .forEach({
                                 //println(it)
                             })
-                    if(hasCurrenciesAndMarkets()) {
+                    if (hasCurrenciesAndMarkets()) {
                         return@subscribe
                     }
-                    handleCurrenciesThatChangedDownMoreThanPercent(75..100000)
-                    handleCurrenciesThatChangedDownMoreThanPercent(50..75)
-                    handleCurrenciesThatChangedDownMoreThanPercent(25..50)
-                    handleCurrenciesThatChangedDownMoreThanPercent(10..25)
-                },{error-> error.printStackTrace()})
+                    handleCurrenciesThatChangedDownMoreThanPercent(0, 75..100000)
+                    handleCurrenciesThatChangedDownMoreThanPercent(1, 50..75)
+                    handleCurrenciesThatChangedDownMoreThanPercent(2, 25..50)
+                    handleCurrenciesThatChangedDownMoreThanPercent(3, 10..25)
+                }, { error -> error.printStackTrace() })
     }
 
-    private fun handleCurrenciesThatChangedDownMoreThanPercent(range:IntRange) {
+    private fun handleCurrenciesThatChangedDownMoreThanPercent(tabs: Int, range: IntRange) {
         val twentyFivePercents = marketSummaries
-                ?.marketSummaries!!.filter { it.changeRate24HrPercent() in range}
+                ?.marketSummaries!!.filter { it.changeRate24HrPercent() in range }
+                .filter { it.marketName.startsWith("ETH-") }
                 .sortedByDescending { it.changeRate24HrPercent() }
         println("There are ${twentyFivePercents.size} currencies with ${range} % drop")
         twentyFivePercents.forEach {
             val marketName = it.marketName.format("%1$10")
             val rate24 = String.format("%.4f", it.changeRate24HrPercent())
-            println("${marketName} ${rate24}")
+            println("\t\t${marketName} ${rate24}")
         }
     }
 
     fun hasCurrenciesAndMarkets(): Boolean {
-        return markets != null && currencies!=null
+        return markets != null && currencies != null
     }
 
     private fun startMarketUpdater() {

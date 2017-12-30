@@ -3,6 +3,7 @@ package us.wmwm.bittrex.app
 import dagger.Component
 import us.wmwm.bittrex.BittrexModule
 import us.wmwm.bittrex.api.Api
+import us.wmwm.bittrex.balance.BalanceManager
 import us.wmwm.bittrex.currency.CurrencyManager
 import us.wmwm.bittrex.market.MarketManager
 import us.wmwm.bittrex.marketsummary.MarketSummaryManager
@@ -15,4 +16,5 @@ interface Bittrex {
     fun marketManager(): MarketManager
     fun marketSummaryManager(): MarketSummaryManager
     fun currencyManager(): CurrencyManager
+    fun balanceManager(): BalanceManager
 }

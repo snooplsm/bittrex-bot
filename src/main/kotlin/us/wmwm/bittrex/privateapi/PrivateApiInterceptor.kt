@@ -23,9 +23,9 @@ class PrivateApiInterceptor : Interceptor {
     init {
         val properties = Properties()
         properties.load(
-                File("${System.getProperty("user.home")}${File.separator}.bittrex${File.separator}.keys").inputStream())
-        key = properties.getProperty("key")
-        secret = properties.getProperty("secret")
+                File("${System.getProperty("user.home")}${File.separator}.bittrex${File.separator}keys").inputStream())
+        key = properties.getProperty("key").trim()
+        secret = properties.getProperty("secret").trim()
     }
 
     private val HMAC_SHA512 = "HmacSHA512"
@@ -54,6 +54,7 @@ class PrivateApiInterceptor : Interceptor {
         val uribuilder = uri.newBuilder().addQueryParameter(API_KEY,key)
                 .addQueryParameter(NONCE, java.lang.String.valueOf(nonce))
         val uriString = uribuilder.build().toString()
+        builder.url(uriString)
         builder.addHeader(API_SIGN, calculateHMAC(uriString, secret))
         return chain.proceed(builder.build())
     }

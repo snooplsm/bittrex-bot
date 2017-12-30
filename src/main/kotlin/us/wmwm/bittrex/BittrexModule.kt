@@ -62,4 +62,3 @@ class BittrexModule {
                 .create()
     }
 }
-
